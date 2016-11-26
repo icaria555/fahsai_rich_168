@@ -10,6 +10,7 @@ class ProductsController < ApplicationController
   # GET /products/1
   # GET /products/1.json
   def show
+    @product = Product.find_by_id(params[:id])
   end
 
   # GET /products/new
@@ -19,6 +20,7 @@ class ProductsController < ApplicationController
 
   # GET /products/1/edit
   def edit
+    @product = Product.find_by_id(params[:id])
   end
 
   # POST /products

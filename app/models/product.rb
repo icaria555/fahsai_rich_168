@@ -1,6 +1,7 @@
 class Product < ApplicationRecord
   has_many :order_product
-  has_many :orders, through: :orderproduct
+  has_many :orders, through: :order_product
+  has_many :product_statement
   
   validates :name, :presence => true, :uniqueness => { case_sensitive: false }
   validates :price, :presence => true, :numericality => true
