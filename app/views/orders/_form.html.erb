@@ -17,24 +17,30 @@
   </div>
   
   <div class="field">
-    <%= f.label :product %>
-    <%= f.text_field :total_price %>
+    <%= f.label :รายการสินค้า %>
     <%= f.label :quantity %>
-    <%= f.text_field :total_price %>
     <%= f.label :price %>
-    <%= f.text_field :total_price %>
     <%= f.label :pv %>
-    <%= f.text_field :total_price %>
   </div>
+  
+  <div class="field", id="productlist">
+    <div class="field", id="product_1">
+      <%= select_tag "products_1", options_from_collection_for_select(@products, "id", "name"), prompt: "กรูณาเลือกสินค้า" %>
+      <%= number_field_tag :quantity_1 %>
+      <%= number_field_tag :price_1 %>
+      <%= number_field_tag :pv_1 %>
+    </div>
+  </div>
+  <%= button_tag "new", :type => "button", :onclick => "javascript:addRowOrder()" %>
 
   <div class="field">
     <%= f.label :total_price %>
-    <%= f.text_field :total_price %>
+    <%= f.text_field :total_price, :value => "0", :type => "number" %>
   </div>
 
   <div class="field">
     <%= f.label :total_pv %>
-    <%= f.text_field :total_pv %>
+    <%= f.text_field :total_pv, :value => "0", :type => "number" %>
   </div>
 
   <div class="actions">

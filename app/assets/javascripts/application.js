@@ -27,3 +27,26 @@
 $(document).ready(function () {
 	$('.datepicker').datepicker({language: 'th'});
 });
+
+function addRowOrder() {
+    var div = document.createElement('div');
+
+    div.className = 'row';
+    var productelement = document.getElementById('productlist').lastElementChild
+    var generate_num = parseInt(productelement.getAttribute("id").split("_")[1]) + 1
+    var select = productelement.firstElementChild
+    console.log(select.getAttribute("id"))
+
+    select.setAttribute("id", "products_" + generate_num.toString())
+    select = productelement.firstChild
+
+    
+
+    div.parseHTML('<input type="number" name="quantity_1" id="quantity_' + generate_num.toString() + '" />\
+      <input type="number" name="price_1" id="price_' + generate_num.toString() + '" />\
+      <input type="number" name="pv_1" id="pv_' + generate_num.toString() + '" />');
+    div.appendChild(select)
+
+
+    document.getElementById('productlist').appendChild(div);
+}
