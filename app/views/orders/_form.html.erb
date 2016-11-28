@@ -24,7 +24,7 @@
   </div>
   
   <div class="field", id="productlist">
-    <div class="field", id="product_1">
+    <div class="field" id="row_1">
       <%= select_tag "products_1", options_from_collection_for_select(@products, "id", "name"), prompt: "กรูณาเลือกสินค้า" %>
       <%= number_field_tag :quantity_1 %>
       <%= number_field_tag :price_1 %>
