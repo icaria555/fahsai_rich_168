@@ -25,10 +25,10 @@
   
   <div class="field", id="productlist">
     <div class="field" id="row_1">
-      <%= select_tag "products_1", options_from_collection_for_select(@products, "id", "name"), prompt: "กรูณาเลือกสินค้า" %>
-      <%= number_field_tag :quantity_1 %>
-      <%= number_field_tag :price_1 %>
-      <%= number_field_tag :pv_1 %>
+      <%= select_tag "products_1", options_from_collection_for_select(@products, "price", "name"), :onchange => "javascript:changeSelection(this)", prompt: "กรูณาเลือกสินค้า" %>
+      <%= number_field_tag :quantity_1, "0" %>
+      <%= number_field_tag :price_1, "0" %>
+      <%= number_field_tag :pv_1, "0" %>
     </div>
   </div>
   <%= button_tag "new", :type => "button", :onclick => "javascript:addRowOrder()" %>
