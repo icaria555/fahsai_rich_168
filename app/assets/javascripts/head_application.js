@@ -6,5 +6,6 @@
 //= require angular
 //= require fahsai_rich_168
 //= require controllers/new-user-ctrl
+//= require controllers/search-user-ctrl
 
 

@@ -12,6 +12,15 @@
   <tbody>
     <% @orders.each do |order| %>
       <tr>
+        <td>ผู้ซื้อ</td>
+        <td>ราคารวม</td>
+        <td>pv รวม</td>
+      </tr>
+      <tr>
+        <%= @buyer = @users.find_by_id(order.purchaser_id) %>
+        <td><%=@buyer.first_name %> <%=@buyer.last_name %></td>
+        <td><%= order.total_price %></td>
+        <td><%= order.total_pv %></td>
         <td><%= link_to 'Show', order %></td>
         <td><%= link_to 'Edit', edit_order_path(order) %></td>
         <td><%= link_to 'Destroy', order, method: :delete, data: { confirm: 'Are you sure?' } %></td>

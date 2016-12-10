@@ -36,6 +36,7 @@ function addRowOrder() {
     var generate_num = parseInt(productelement.getAttribute("id").split("_")[1]) + 1
     div.id = 'row_' + generate_num.toString()
     var select = productelement.firstElementChild.cloneNode(true)
+    select.id = 'products_' + generate_num.toString()
     
     select.setAttribute("id", "products_" + generate_num.toString())
     div.appendChild(select)
@@ -77,7 +78,7 @@ function deleteRow(row_num) {
     calculatePrice()
 }
 
-function calculatePrice() {
+function calculateTotalPrice() {
     var productelement = document.getElementById('productlist').children
     var totalprice = 0
     var totalpv = 0
@@ -106,5 +107,8 @@ function changeSelection(select) {
     parent[1].value = 1 //quantity value
     parent[2].value = select.value //price value
     parent[3].value = 1 //pv value
-    calculatePrice()
+    calculateTotalPrice()
+    // $.ajax({url: $(location).attr('href'), type: "GET", ifModified:true, success: function(result, status, xhr){
+    
+    // }});
 }

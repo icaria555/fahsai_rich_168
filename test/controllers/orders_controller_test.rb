@@ -1,7 +1,10 @@
 require 'test_helper'
 
 class OrdersControllerTest < ActionDispatch::IntegrationTest
+  include Devise::Test::IntegrationHelpers
   setup do
+    @user = users(:rungroj)
+    sign_in @user
     @order = orders(:one)
   end
 
@@ -17,9 +20,13 @@ class OrdersControllerTest < ActionDispatch::IntegrationTest
 
   test "should create order" do
     assert_difference('Order.count') do
-      post orders_url, params: { order: {  } }
+      post orders_url, params: { order: {
+        purchaser_id: 2,
+        total_price: 200,
+        total_pv: 10
+      }
+    }
     end
-
     assert_redirected_to order_url(Order.last)
   end
 
@@ -34,7 +41,11 @@ class OrdersControllerTest < ActionDispatch::IntegrationTest
   end
 
   test "should update order" do
-    patch order_url(@order), params: { order: {  } }
+    patch order_url(@order), params: { order: {  
+        :purchaser_id => 2,
+        :total_price => 1000,
+        :total_pv => 10
+    } }
     assert_redirected_to order_url(@order)
   end
 

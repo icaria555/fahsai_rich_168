@@ -1,6 +1,6 @@
 angular.module('FahsaiRich168')
 	.controller('NewUserCtrl', ['$scope', '$http', function($scope, $http){
-		var host = "http://localhost:3000";
+		var host = "https://project-freelance1-031160-t-icaria555.c9users.io";
 		$scope.provinces = [];
 		$scope.amphurs = [{name: "กรุณาเลือกจังหวัดก่อน"}];
 		$scope.districts = [{name: "กรุณาเลือกอำเภอก่อน"}];

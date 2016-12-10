@@ -1,0 +1,35 @@
+rungroj:
+  id: 1
+  district_id: 7069
+  amphur_id: 787
+  province_id: 56
+  zipcode_id: 1
+  role_id: 1
+  email: "o_k_t2@hotmail.com"
+  encrypted_password: "password"
+  iden_number: "1100200915191"
+  first_name: "rungroj"
+  last_name: "kulapan"
+  address: "111/1 ม.3"
+  phone_number: "0826810461"
+  line_id: "rungroj"
+  birthday: "06/02/1993"
+  gender: "male"
+  
+tachagon:
+  id: 2
+  district_id: 7069
+  amphur_id: 787
+  province_id: 56
+  zipcode_id: 1
+  role_id: 1
+  email: "o_k_t@hotmail.com"
+  encrypted_password: "password"
+  iden_number: "1102001936122"
+  first_name: "Tatchagon"
+  last_name: "Koonkoei"
+  address: "111/1 ม.3"
+  phone_number: "0826810461"
+  line_id: "tachagon"
+  birthday: "06/02/1993"
+  gender: "male"
