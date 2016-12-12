@@ -1,13 +1,15 @@
 # Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
 one:
+  id: 1
   name: Coffee1
   description: MyText
   price: 1.5
   pv: 1.5
-  quantity: 1000
+  quantity: 2000
   unit: MyString
 
 two:
+  id: 2
   name: Coffee2
   description: MyText
   price: 2

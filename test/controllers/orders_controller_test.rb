@@ -24,6 +24,20 @@ class OrdersControllerTest < ActionDispatch::IntegrationTest
         purchaser_id: 2,
         total_price: 200,
         total_pv: 10
+      },
+      list: {
+        product1: {
+          id: 1,
+          quantity: 1,
+          price: 1,
+          pv: 1
+        },
+        product2: {
+          id: 2,
+          quantity: 1,
+          price: 1,
+          pv: 1
+        }
       }
     }
     end

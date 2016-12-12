@@ -24,6 +24,7 @@ class OrdersController < ApplicationController
   def edit
     print params[:id]
     @order = current_user.orders.find_by_id(params[:id])
+    @products = Product.all
   end
 
   # POST /orders
@@ -31,13 +32,28 @@ class OrdersController < ApplicationController
   def create
     order_params.permit!
     order_params[:saler_id] = current_user.id
-    @order = current_user.orders.new(order_params)
+    @order = current_user.orders.create(order_params)
+    params.require(:list)
+    if params.has_key?(:list)
+      params[:list].each do |pro|
+        @product = Product.find_by_id(params[:list][pro][:id])
+        @test = @order.order_products.create(
+            product: @product,
+            :quantity => params[:list][pro][:quantity].to_i ,
+            :total_price => params[:list][pro][:price].to_i ,
+            :total_pv => params[:list][pro][:pv].to_i
+          )
+        print @test.product.name
+      end
+    end
 
     respond_to do |format|
       if @order.save
         format.html { redirect_to @order, notice: 'Order was successfully created.' }
         format.json { render :show, status: :created, location: @order }
       else
+        @products = Product.all
+        print  @order.errors.full_messages
         format.html { render :new }
         format.json { render json: @order.errors, status: :unprocessable_entity }
       end

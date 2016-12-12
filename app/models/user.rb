@@ -27,7 +27,7 @@ class User < ApplicationRecord
   belongs_to :role
   has_many :orders
   has_many :stocks
-  has_many :producs, through: :stock
+  has_many :producs, through: :stocks
 
   # ===================================================
   # validation

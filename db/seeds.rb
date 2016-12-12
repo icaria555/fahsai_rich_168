@@ -69,7 +69,7 @@ def create_user
 	amphur = province.amphurs.first
 	district = amphur.districts.first
 	zipcode = district.zipcodes.first
-	User.create(
+	user = User.create(
 		email: "o_k_t@hotmail.com",
 		password: "password",
 		iden_number: "1102001936122",
@@ -86,6 +86,7 @@ def create_user
 		gender: "male"
 		)
 	puts "create user success!"
+	
 end
 
 create_roles()

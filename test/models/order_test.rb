@@ -7,24 +7,8 @@ class OrderTest < ActiveSupport::TestCase
     @thamuang = amphurs(:thamuang)
     @kanchanaburi = provinces(:kanchanaburi)
     @thamuang_zip = zipcodes(:thamuang_zip)
-    @user = 	User.new(
-  		email: "o_k_t@hotmail.com",
-  		password: "password",
-  		iden_number: "1102001936122",
-  		first_name: "Tatchagon",
-  		last_name: "Koonkoei",
-  		address: "111/1 ม.3",
-  		district: @banmai,
-  		amphur: @thamuang,
-  		province: @kanchanaburi,
-  		zipcode: @thamuang_zip,
-  		phone_number: "0826810461",
-  		line_id: "tachagon",
-  		birthday: "06/02/1993",
-  		gender: "male"
-		)
-    @user.save!
-    @order = @user.order.create!(
+    @user = 	users(:rungroj)
+    @order = @user.orders.create!(
       :purchaser_id => "name1",
       :saler_id => "description"
     )
@@ -84,4 +68,24 @@ class OrderTest < ActiveSupport::TestCase
     @order.total_pv = "text"
     assert_not @order.valid?
   end
+  # ==========================================================
+  # test amount saler_id
+  # ==========================================================
+  
+  test "product should be exists" do
+#    @product = products.find_by_id(1)
+    @product = Product.new(
+         :name => "fish",
+         :description => "food",
+         :price => 1000000,
+         :pv => 0,
+         :quantity => 2,
+         )
+    @orderproduct =  @order.order_products.create(
+      product: @product,
+      :quantity => 0)
+    print @orderproduct.errors.full_messages
+    assert @orderproduct.valid?
+  end
+  
 end
