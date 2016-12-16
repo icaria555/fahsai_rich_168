@@ -10,25 +10,26 @@
   </thead>
 
   <tbody>
-    
-    <% @order.products.each do |order| %>
-      <tr>
+    <% @buyer = @users.find_by_id(@order.purchaser_id) %>
+    ผู้ซื้อ
+    <%=@buyer.first_name %> <%=@buyer.last_name %>
+    <tr>
         <td>รายชื่อสินค้า</td>
         <td>ราคารวม</td>
-        <td>pv รวม</td>
+        <td>pvรวม</td>
       </tr>
+    <% @order.order_products.each do |product| %>
+      
       <tr>
-        <%= @buyer = @users.find_by_id(order.purchaser_id) %>
-        <td><%=@buyer.first_name %> <%=@buyer.last_name %></td>
-        <td><%= order.total_price %></td>
-        <td><%= order.total_pv %></td>
-        <td><%= link_to 'Show', order %></td>
-        <td><%= link_to 'Edit', edit_order_path(order) %></td>
-        <td><%= link_to 'Destroy', order, method: :delete, data: { confirm: 'Are you sure?' } %></td>
+        <td><%= product.product.name %></td>
+        <td><%= product.total_price %></td>
+        <td><%= product.total_pv %></td>
+        <td><%= link_to 'Show', product.product %></td>
       </tr>
+      </td>
     <% end %>
   </tbody>
 </table>
 
-<%= link_to 'Edit', edit_order_path(@order) %> |
+<%= link_to 'Edit', edit_order_path(@order) %> | <%= link_to 'Destroy', @order, method: :delete, data: { confirm: 'Are you sure?' } %> |
 <%= link_to 'Back', orders_path %>

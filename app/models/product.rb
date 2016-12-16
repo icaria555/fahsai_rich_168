@@ -1,5 +1,5 @@
 class Product < ApplicationRecord
-  has_many :order_product
+  has_many :order_products
   has_many :product_statement
   has_many :stocks
   has_many :orders, through: :order_products

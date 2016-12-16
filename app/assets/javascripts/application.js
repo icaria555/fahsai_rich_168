@@ -30,43 +30,29 @@ $(document).ready(function () {
 
 function addRowOrder() {
     var div = document.createElement('div');
-
     div.className = 'field';
-    var productelement = document.getElementById('productlist').lastElementChild
-    var generate_num = parseInt(productelement.getAttribute("id").split("_")[1]) + 1
-    div.id = 'row_' + generate_num.toString()
-    var select = productelement.firstElementChild.cloneNode(true)
-    select.id = 'products_' + generate_num.toString()
     
-    select.setAttribute("id", "products_" + generate_num.toString())
-    div.appendChild(select)
-    div.innerHTML = div.innerHTML + '<input type="number" name="quantity_1" id="quantity_' + generate_num.toString() + '" value="0" />\
-      <input type="number" name="price_1" id="price_' + generate_num.toString() + '" value="0" />\
-      <input type="number" name="pv_1" id="pv_' + generate_num.toString() + '" value="0" />\
-      <button name="button" type="button" onclick="javascript:deleteRow(' + generate_num.toString() + ')">delete</button>';
-    //console.log(div.innerHTML)
-    document.getElementById('productlist').appendChild(div);
-    //console.log(document.getElementById('productlist').innerHTML);
-}
-
-function addRowStatement() {
-    var div = document.createElement('div');
-
-    div.className = 'field';
     var productelement = document.getElementById('productlist').lastElementChild
-    var generate_num = parseInt(productelement.getAttribute("id").split("_")[1]) + 1
-    div.id = 'row_' + generate_num.toString()
-    var select = productelement.firstElementChild.cloneNode(true)
+    var generate_num = (parseInt(productelement.getAttribute("id").split("_")[1]) + 1).toString()
+    div.id = 'row_' + generate_num
     
-    select.setAttribute("id", "products_" + generate_num.toString())
+    var select = productelement.firstElementChild.cloneNode(true)
+    select.setAttribute("id", "list_product" + generate_num + "_id")
+    select.setAttribute("name", "list[product" + generate_num + "[id]]")
     div.appendChild(select)
-    div.innerHTML = div.innerHTML + '<input type="number" name="quantity_1" id="quantity_' + generate_num.toString() + '" value="0" />\
-      <input type="number" name="price_1" id="price_' + generate_num.toString() + '" value="0" />\
-      <input type="number" name="pv_1" id="pv_' + generate_num.toString() + '" value="0" />\
-      <button name="button" type="button" onclick="javascript:deleteRow(' + generate_num.toString() + ')">delete</button>';
-    //console.log(div.innerHTML)
+    
+    var elem_name = ['quantity', 'price', 'pv']
+    elem_name.forEach(function(name) {
+        var elem = document.createElement('input')
+        elem.setAttribute("id", "list_product" + generate_num + "_" + name)
+        elem.setAttribute("name", "list[product" + generate_num + "[" + name + "]]")
+        elem.setAttribute("type", "number");
+        elem.textContent = "0"
+        div.appendChild(elem)
+    });
+    
+    div.innerHTML = div.innerHTML + '<button onclick="deleteRow(' + generate_num + ')">delete</button>'
     document.getElementById('productlist').appendChild(div);
-    //console.log(document.getElementById('productlist').innerHTML);
 }
 
 function deleteRow(row_num) {
@@ -102,13 +88,14 @@ function calculateTotalPrice() {
 
 function changeSelection(select) {
     var parent = select.parentElement.children
+    var purchaser = document.getElementById('order_purchaser_id')
     console.log(parent)
     console.log(select.value)
     parent[1].value = 1 //quantity value
     parent[2].value = select.value //price value
     parent[3].value = 1 //pv value
     calculateTotalPrice()
-    // $.ajax({url: $(location).attr('href'), type: "GET", ifModified:true, success: function(result, status, xhr){
+     $.ajax({url: $(location).attr('href'), type: "GET", dataType: 'xml', ifModified:true, success: function(result, status, xhr){
     
-    // }});
+     }});
 }

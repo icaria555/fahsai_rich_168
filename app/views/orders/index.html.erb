@@ -10,14 +10,15 @@
   </thead>
 
   <tbody>
-    <% @orders.each do |order| %>
-      <tr>
+    <tr>
         <td>ผู้ซื้อ</td>
         <td>ราคารวม</td>
         <td>pv รวม</td>
       </tr>
+    <% @orders.each do |order| %>
+      
       <tr>
-        <%= @buyer = @users.find_by_id(order.purchaser_id) %>
+        <% @buyer = @users.find_by_id(order.purchaser_id) %>
         <td><%=@buyer.first_name %> <%=@buyer.last_name %></td>
         <td><%= order.total_price %></td>
         <td><%= order.total_pv %></td>

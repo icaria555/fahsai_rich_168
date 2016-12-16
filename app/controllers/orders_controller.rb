@@ -6,23 +6,42 @@ class OrdersController < ApplicationController
   def index
     @orders = current_user.orders.all
     @users = User.all
+    @orders.each do |order|
+      print order.purchaser_id , "ttesjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjt"
+      @users.find_by_id(order.purchaser_id).nil?
+    end
+    
   end
 
   # GET /orders/1
   # GET /orders/1.json
   def show
+    @users = User.all
     @order = current_user.orders.find_by_id(params[:id])
+    print @order.products.length, params[:id], "length"
   end
 
   # GET /orders/new
   def new
     @products = Product.all
     @order = Order.new
+    respond_to do |format|
+      format.html { render template: "orders/new"}
+      format.json {
+        
+        render json @order 
+      }
+    end
+  end
+  
+  def pricetag
+    
+    render json @order
   end
 
   # GET /orders/1/edit
   def edit
-    print params[:id]
+    @users = User.all
     @order = current_user.orders.find_by_id(params[:id])
     @products = Product.all
   end
@@ -34,7 +53,7 @@ class OrdersController < ApplicationController
     order_params[:saler_id] = current_user.id
     @order = current_user.orders.create(order_params)
     params.require(:list)
-    if params.has_key?(:list)
+    if params.has_key?(:list) and order_params[:purchaser_id] != 0
       params[:list].each do |pro|
         @product = Product.find_by_id(params[:list][pro][:id])
         @test = @order.order_products.create(
@@ -43,12 +62,12 @@ class OrdersController < ApplicationController
             :total_price => params[:list][pro][:price].to_i ,
             :total_pv => params[:list][pro][:pv].to_i
           )
-        print @test.product.name
       end
     end
 
     respond_to do |format|
       if @order.save
+        @users = User.all
         format.html { redirect_to @order, notice: 'Order was successfully created.' }
         format.json { render :show, status: :created, location: @order }
       else
