@@ -86,9 +86,69 @@ def create_user
 		gender: "male"
 		)
 	puts "create user success!"
-	
 end
 
-create_roles()
-create_th_location()
-create_user()
+def create_product_and_discout
+	@product = Product.create(
+         :name => "Black Coffee",
+         :description => "description",
+         :price => 350,
+         :pv => 5,
+         :quantity => 300,
+         :unit => "112")
+  @product2 = Product.create(
+         :name => "green tea",
+         :description => "description",
+         :price => 400,
+         :pv => 10,
+         :quantity => 300,
+         :unit => "112")
+  @product3 = Product.create(
+         :name => "CoCo green tea",
+         :description => "description",
+         :price => 500,
+         :pv => 15,
+         :quantity => 400,
+         :unit => "112")
+         
+  #@product_list = [@product, @product2, @product3]
+  
+  @role1 = Role.wholesaler
+  @role2 = Role.mobile
+  #@role_list = [@role1, @role2]
+
+  
+  @dis1 = @product.discounts.create(
+  	role: @role1,
+  	:amount => 200
+  	)
+  @dis2 = @product.discounts.create(
+  	role: @role2,
+  	:amount => 100
+  	)
+  @dis3 = @product2.discounts.create(
+  	role: @role1,
+  	:amount => 200
+  	)
+  @dis4 = @product2.discounts.create(
+  	role: @role2,
+  	:amount => 100
+  	)
+  @dis5 = @product3.discounts.create(
+  	role: @role1,
+  	:amount => 200
+  	)
+  @dis6 = @product2.discounts.create(
+  	role: @role2,
+  	:amount => 100
+  	)
+end
+
+def deleteAllTable 
+	Product.delete_all
+end
+
+#create_roles()
+#create_th_location()
+#create_user()
+create_product_and_discout()

@@ -22,7 +22,7 @@ tachagon:
   amphur_id: 787
   province_id: 56
   zipcode_id: 1
-  role_id: 1
+  role_id: 3
   email: "o_k_t@hotmail.com"
   encrypted_password: "password"
   iden_number: "1102001936122"

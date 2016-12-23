@@ -1,5 +1,7 @@
 class Role < ApplicationRecord
   has_many :users
+  has_many :discounts
+  has_many :products, through: :discounts
 
   validates :name, :presence => true
 	validates :level, :presence => true, :numericality => { only_integer: true, greater_than_or_equal_to: 0 }

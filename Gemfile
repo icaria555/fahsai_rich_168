@@ -57,3 +57,4 @@ gem "font-awesome-rails"
 gem 'ionicons-rails'
 gem 'angularjs-rails', '~> 1.5.8'
 gem "select2-rails"
+gem 'json'

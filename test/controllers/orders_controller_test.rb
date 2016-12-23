@@ -43,6 +43,20 @@ class OrdersControllerTest < ActionDispatch::IntegrationTest
     end
     assert_redirected_to order_url(Order.last)
   end
+  
+  test "pricetagfield" do 
+    post '/pricetagfield', params: { purchaser_id: 2 }
+    body = JSON.parse(response.body)
+    #print body
+    assert_response :success
+  end
+
+  test "pricetagselcect test" do
+    post '/pricetagselect', params: { purchaser_id: 2, product_id: 1 }
+    body = JSON.parse(response.body)
+    #print body
+    assert_response :success
+  end
 
   test "should show order" do
     get order_url(@order)

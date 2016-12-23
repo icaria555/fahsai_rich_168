@@ -3,6 +3,7 @@ class Product < ApplicationRecord
   has_many :product_statement
   has_many :stocks
   has_many :orders, through: :order_products
+  has_many :discounts
   
   validates :name, :presence => true, :uniqueness => { case_sensitive: false }
   validates :price, :presence => true, :numericality => true

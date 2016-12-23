@@ -1,19 +1,25 @@
 admin:
-  name: admin
+  id: 1
+  name: "admin"
   level: 1
 
 employee:
-  name: employee
+  id: 2
+  name: "employee"
   level: 2
 
 wholesaler:
-  name: wholesaler
+  id: 3
+  name: "wholesaler"
   level: 3
+  
 
 mobile:
-  name: mobile
+  id: 4
+  name: "mobile"
   level: 4
 
 member:
-  name: member
+  id: 5
+  name: "member"
   level: 5

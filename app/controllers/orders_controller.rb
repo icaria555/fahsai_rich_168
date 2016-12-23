@@ -7,7 +7,6 @@ class OrdersController < ApplicationController
     @orders = current_user.orders.all
     @users = User.all
     @orders.each do |order|
-      print order.purchaser_id , "ttesjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjt"
       @users.find_by_id(order.purchaser_id).nil?
     end
     
@@ -25,18 +24,43 @@ class OrdersController < ApplicationController
   def new
     @products = Product.all
     @order = Order.new
-    respond_to do |format|
-      format.html { render template: "orders/new"}
-      format.json {
-        
-        render json @order 
-      }
+  end
+  
+  def pricetagselect
+    if(params[:purchaser_id] != 0)
+      print params[:purchaser_id]
+      @users = User.all
+      @users.each do |user|
+        print user.first_name
+      end
+      @user = User.find_by_id(2)
+      
+      puts ""
+      print 'user valid ? = ', @user.valid?
+      print @user.errors.full_messages
+      puts ""
+      @role = @user.role
+      @product = Product.find_by_id(params[:product_id])
+      print 'product valid ? = ', @product.valid?
+      print @product.name
+      puts ""
+      print '======role=====', @role.name, '======role====='
+      puts ""
+      @discount = @role.discounts.find_by_product_id(@product)
+      if(@discount.nil?)
+        @price = @product.price
+      else
+        @price = (@product.price - @discount.amount).to_i
+      
+      end
+      render json: {"price": @price, "pv": @product.pv}
     end
   end
   
-  def pricetag
-    
-    render json @order
+  def pricetagfield
+    print params
+    @message = {"employees":[{"firstName":"Peter", "lastName":"Jones"}]}
+    render json: @message
   end
 
   # GET /orders/1/edit

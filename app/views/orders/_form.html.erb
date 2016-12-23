@@ -10,52 +10,52 @@
       </ul>
     </div>
   <% end %>
-  
-  <div ng-controller="SearchUserCrtl">
-  <div class="field">
-    <%= f.label :ผู้ซื้อ %>
-    <select name="order[purchaser_id]" id="order_purchaser_id" class="form-control" ng-model="purchaser_id" ng-change="">
-      <option value="0">เลือกผู้ซื้อ</option>
-      <option ng-repeat="user in users" value="{{user.id}}">
-        {{user.first_name + " " + user.last_name + " " + user.email}}
-      </option>
-    </select>
-    
-  </div>
-  
-  <div class="field">
-    <div class="column"><%= f.label :รายการสินค้า %></div>
-    <div class="column"><%= f.label :quantity %></div>
-    <div class="column"><%= f.label :price %></div>
-    <div class="column"><%= f.label :pv %></div>
-  </div>
-  
-  <div class="field", id="productlist">
-    <div class="field" id="row_1">
-      <select name="list[product1[id]]" id="list_product1_id" onchange="javascript:changeSelection(this)">
-        <option value="0">กรุณาเลือกสินค้า</option>
-        <%= options_from_collection_for_select(@products, "id", "name") %>
+    <div ng-controller="SearchUserCrtl">
+    <div class="field">
+      <%= f.label :ผู้ซื้อ %>
+      <select name="order[purchaser_id]" id="order_purchaser_id" onchange='javascript:changePrice()' >
+        <option value="0" selected="selected" disabled>เลือกผู้ซื้อ</option>
+        <option ng-repeat="user in users" value="{{user.id}}">
+          {{user.first_name + " " + user.last_name + " " + user.email}}
+        </option>
       </select>
-      <input type="number" name="list[product1[quantity]]" id="list_product1_quantity" value="0">
-      <input type="number" name="list[product1[price]]" id="list_product1_price" value="0">
-      <input type="number" name="list[product1[pv]]" id="list_product1_pv" value="0">
     </div>
-  </div>
+    
+    <div class="field">
+      <%= f.label :รายการสินค้า %>
+      <%= f.label :quantity %>
+      <%= f.label :price %>
+      <%= f.label :pv %>
+    </div>
+
+    <div class="field", id="productlist">
+      <div class="field" id="row_1">
+        <select name="list[product1[id]]" id="list_product1_id" onchange="javascript:changeSelection(this)">
+          <option value="0">กรุณาเลือกสินค้า</option>
+          <%= options_from_collection_for_select(@products, "id", "name") %>
+        </select>
+        <input type="number" name="list[product1[quantity]]" id="list_product1_quantity" value="0" onchange="javascript:changeQuantity(this)">
+        <input type="number" name="list[product1[price]]" id="list_product1_price" value="0">
+        <input type="number" name="list[product1[pv]]" id="list_product1_pv" value="0">
+      </div>
+    </div>
+    
+    <%= button_tag "new", :type => "button", :onclick => "javascript:addRowOrder()" %>
   
-  <%= button_tag "new", :type => "button", :onclick => "javascript:addRowOrder()" %>
-
-  <div class="field">
-    <%= f.label :total_price %>
-    <%= f.text_field :total_price, :value => "0", :type => "number" %>
-  </div>
-
-  <div class="field">
-    <%= f.label :total_pv %>
-    <%= f.text_field :total_pv, :value => "0", :type => "number" %>
-  </div>
-
-  <div class="actions">
-    <%= f.submit %>
-  </div>
-  </div>
+    <div class="field">
+      <%= f.label :total_price %>
+      <%= f.text_field :total_price, :value => "0", :type => "number" %>
+    </div>
+  
+    <div class="field">
+      <%= f.label :total_pv %>
+      <%= f.text_field :total_pv, :value => "0", :type => "number" %>
+    </div>
+  
+    <div class="actions">
+      <%= f.submit %>
+    </div>
+    </div>
+    </tbody>
+  </table>
 <% end %>
