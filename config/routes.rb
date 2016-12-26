@@ -7,6 +7,7 @@ Rails.application.routes.draw do
   }
   post 'pricetagselect' => 'orders#pricetagselect'
   post 'pricetagfield' => 'orders#pricetagfield'
+  post 'checkquantity' => 'order#checkquantity'
   
   get 'users' => 'users#index'
   

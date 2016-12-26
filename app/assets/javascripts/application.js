@@ -27,6 +27,7 @@
 $(document).ready(function () {
 	$('.datepicker').datepicker({language: 'th'});
 });
+var changeCount = 1
 
 function addRowOrder() {
     var div = document.createElement('div');
@@ -47,9 +48,12 @@ function addRowOrder() {
         elem.setAttribute("id", "list_product" + generate_num + "_" + name)
         elem.setAttribute("name", "list[product" + generate_num + "[" + name + "]]")
         elem.setAttribute("type", "number");
-        elem.textContent = "0"
+        elem.setAttribute("value", "0");
         if(name == 'quantity'){
-            elem.onChange = "changeQuantity(this)"
+            console.log("change")
+            elem.setAttribute("onchange", "javascript:changeQuantity(this)")
+            elem.setAttribute("onfocus", "javascript:storePreviousValue(this)")
+            
         }
         div.appendChild(elem)
     });
@@ -64,7 +68,7 @@ function deleteRow(row_num) {
     var parentNode = delete_target.parentNode
     parentNode.removeChild(delete_target)
     //console.log(row_num)
-    calculatePrice()
+    calculateTotalPrice()
 }
 
 function calculateTotalPrice() {
@@ -75,15 +79,21 @@ function calculateTotalPrice() {
     
     for (var i = 0; i < productelement.length; i++) {
         var rowelement = productelement[i].children
-        totalprice += parseInt(rowelement[2].value) //rowelement[2] == price on text field box
-        totalpv += parseInt(rowelement[3].value)
+        console.log( isNaN(rowelement[2].value) + " " + rowelement[2].value)
+        if( !isNaN(rowelement[2].value) & !isNaN(rowelement[3].value)) {
+            totalprice += parseInt(rowelement[2].value) //rowelement[2] == price on text field box
+            totalpv += parseInt(rowelement[3].value)
+        }
     }
-    console.log("total price" + totalprice + "pv" + totalpv)
+    //console.log("total price" + totalprice + "pv" + totalpv)
     document.getElementById('order_total_price').value = totalprice
     document.getElementById('order_total_pv').value = totalpv
 }
 
-var changeCount = 1
+function storePreviousValue(element) {
+    changeCount = element.value
+}
+
 function changeQuantity(element) {
     var parent = element.parentElement.children
     var priceElem = parent[2] 
@@ -95,51 +105,86 @@ function changeQuantity(element) {
     
     var changePrice = 0
     var changePv = 0
-    
 
     var realPrice = price/changeCount 
     var realPv = pv/changeCount
     changePrice = realPrice * count
     changePv = realPv * count
-    changeCount = count
     priceElem.value = changePrice
     pvElem.value = changePv
-    
+    changeCount = count
     calculateTotalPrice()
+}
+
+function changeQuantity2(element) {
+    var parent = element.parentElement
+    var child = parent.children
+    var dat = { product_id: child[0].value, quantity: child[1].value, element_name: parent.id }
+    
+    $.ajax({url: '/checkquantity', data: dat, type: "POST", dataType: 'JSON', ifModified:true, success: function(result, status, xhr){
+        var changedPrice = result["price"]
+        var pv = result["pv"]
+        console.log("s " + changedPrice + " " + pv + "e")
+        changeElement([changedPrice, pv], result["element_name"])
+    }});
 }
 
 function changeSelection(select) {
-    var parent = select.parentElement.children
+    var parent = select.parentElement.id
     var purchaser = document.getElementById('order_purchaser_id')
     
-    //console.log(parent)
+    console.log(parent)
     //console.log(select.value)
-    
-    var changedPrice = 0
-    var pv = 0
-    var dat = { product_id: select.value, purchaser_id: purchaser.value }
-     $.ajax({url: '/pricetagselect', data: dat, async: false, type: "POST", dataType: 'JSON', ifModified:true, success: function(result, status, xhr){
-         //console.log(status)
-         //console.log(result["price"])
-         //console.log(result["pv"])
-         
-         
-         changedPrice = result["price"]
-         pv = result["pv"]
-         
-     }});
-    parent[1].value = 1 //quantity value
-    parent[2].value = changedPrice //price value
-    parent[3].value = parseInt(pv) //pv value
+    var dat = { product_id: select.value, purchaser_id: purchaser.value, element_name: parent }
+    $.ajax({url: '/pricetagselect', data: dat, type: "POST", dataType: 'JSON', ifModified:true, success: function(result, status, xhr){
+        var changedPrice = result["price"]
+        var pv = result["pv"]
+        console.log("s " + changedPrice + " " + pv + "e")
+        changeElement([changedPrice, pv], result["element_name"])
+    }});
+}
+
+function changeElement(data, name) {
+    var element = document.getElementById(name).children
+    element[1].value = 1
+    element[2].value = data[0]
+    element[3].value = data[1]
     calculateTotalPrice()
 }
 
-
-function changePrice() {
-    var productelement = document.getElementById('productlist').lastElementChild
-    var generate_num = (parseInt(productelement.getAttribute("id").split("_")[1]) + 1).toString()
+function changeTextfield(purchaser_element) {
+    var row_element = document.getElementById('productlist').children
+    var purchaser = purchaser_element
+    var length = row_element.length
+    var product_id_list = []
     
-    //$.ajax({url: $(location).attr('href'), type: "GET", dataType: 'xml', ifModified:true, success: function(result, status, xhr){
-    
-    //}});
+    for (var i = 0; i < length; i++) {
+        var product_id = row_element[i].children[0].value
+        if(product_id != 0) product_id_list.push(product_id);
+    }
+    console.log("list = " + product_id_list.length)
+    if(product_id_list.length) {
+        var dat = { purchaser_id: purchaser.value, product_list: product_id_list }
+        console.log("test")
+        $.ajax({url: '/pricetagfield', data: dat, type: "POST", dataType: 'JSON', ifModified:true, success: function(result, status, xhr){
+            console.log(result)
+            var row_element = document.getElementById('productlist').children
+            for (var i = 0; i < length; i++) {
+                
+            }
+                
+        }});
+    }
 }
+
+function changeProductField(data) {
+    var row_element = document.getElementById('productlist').children
+    var purchaser = purchaser_element
+    var length = row_element.length
+    
+    product_id_list = data[1]
+    
+    for (var i = 0; i < length; i++) {
+    }
+}
+

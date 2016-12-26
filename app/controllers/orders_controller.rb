@@ -26,41 +26,54 @@ class OrdersController < ApplicationController
     @order = Order.new
   end
   
+  def changePrice(user_id, product_id)
+    @user = User.find_by_id(params[:purchaser_id])
+    @role = @user.role
+    @discount = @role.discounts.find_by_product_id(@product)
+    if(@discount.nil?)
+      return @price = @product.price
+    else
+      return @price = (@product.price - @discount.amount).to_i
+    end
+  end
+  
   def pricetagselect
-    if(params[:purchaser_id] != 0)
-      print params[:purchaser_id]
+    if(params[:purchaser_id] != "0")
       @users = User.all
       @users.each do |user|
         print user.first_name
       end
-      @user = User.find_by_id(2)
-      
-      puts ""
-      print 'user valid ? = ', @user.valid?
-      print @user.errors.full_messages
-      puts ""
-      @role = @user.role
+      @purchaser_id = params[:purchaser_id]
+      @product_id = params[:product_id]
+      @price = changePrice(@purchaser_id, @product_id)
+
+      render json: {"price": @price, "pv": @product.pv, "element_name": params[:element_name]}
+    else
       @product = Product.find_by_id(params[:product_id])
-      print 'product valid ? = ', @product.valid?
-      print @product.name
-      puts ""
-      print '======role=====', @role.name, '======role====='
-      puts ""
-      @discount = @role.discounts.find_by_product_id(@product)
-      if(@discount.nil?)
-        @price = @product.price
-      else
-        @price = (@product.price - @discount.amount).to_i
-      
-      end
-      render json: {"price": @price, "pv": @product.pv}
+      render json: {"price": @product.price, "pv": @product.pv, "element_name": params[:element_name]}
     end
+    
   end
   
   def pricetagfield
-    print params
-    @message = {"employees":[{"firstName":"Peter", "lastName":"Jones"}]}
+    print params[:product_list]
+    @purchaser_id = params[:purchaser_id]
+    @product_id_list = params[:product_list]
+    list = []
+    
+    if(purchaser_id != "0") 
+      @user = User.find_by_id(purchaser_id)
+      product_id_list.each do |product_id|
+        @price = changePrice(@purchaser_id, product_id)
+        list.push(@price)
+      end
+    end
+    
+    @message = {"price": list}
     render json: @message
+  end
+  
+  def checkquantity 
   end
 
   # GET /orders/1/edit
