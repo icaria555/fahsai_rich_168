@@ -1,7 +1,4 @@
 <p id="notice"><%= notice %></p>
-
-
-
 <table>
   <thead>
     <tr>
@@ -14,12 +11,11 @@
     ผู้ซื้อ
     <%=@buyer.first_name %> <%=@buyer.last_name %>
     <tr>
-        <td>รายชื่อสินค้า</td>
-        <td>ราคารวม</td>
-        <td>pvรวม</td>
-      </tr>
+      <td>รายชื่อสินค้า</td>
+      <td>ราคารวม</td>
+      <td>pvรวม</td>
+    </tr>
     <% @order.order_products.each do |product| %>
-      
       <tr>
         <td><%= product.product.name %></td>
         <td><%= product.total_price %></td>

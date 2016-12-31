@@ -27,8 +27,9 @@ class OrdersController < ApplicationController
   end
   
   def changePrice(user_id, product_id)
-    @user = User.find_by_id(params[:purchaser_id])
+    @user = User.find_by_id(user_id)
     @role = @user.role
+    @product = Product.find_by_id(product_id)
     @discount = @role.discounts.find_by_product_id(@product)
     if(@discount.nil?)
       return @price = @product.price
@@ -45,7 +46,7 @@ class OrdersController < ApplicationController
       end
       @purchaser_id = params[:purchaser_id]
       @product_id = params[:product_id]
-      @price = changePrice(@purchaser_id, @product_id)
+      @price = self.changePrice(@purchaser_id, @product_id)
 
       render json: {"price": @price, "pv": @product.pv, "element_name": params[:element_name]}
     else
@@ -88,9 +89,10 @@ class OrdersController < ApplicationController
   def create
     order_params.permit!
     order_params[:saler_id] = current_user.id
-    @order = current_user.orders.create(order_params)
+    
     params.require(:list)
     if params.has_key?(:list) and order_params[:purchaser_id] != 0
+      @order = current_user.orders.create(order_params)
       params[:list].each do |pro|
         @product = Product.find_by_id(params[:list][pro][:id])
         @test = @order.order_products.create(

@@ -1,0 +1,58 @@
+<%= form_for(statement) do |f| %>
+  <% if statement.errors.any? %>
+    <div id="error_explanation">
+      <h2><%= pluralize(statement.errors.count, "error") %> prohibited this statement from being saved:</h2>
+
+      <ul>
+      <% statement.errors.full_messages.each do |message| %>
+        <li><%= message %></li>
+      <% end %>
+      </ul>
+    </div>
+  <% end %>
+  
+  <div ng-controller="SearchUserCrtl">
+  <div class="field">
+    <%= f.label :ผู้ซื้อ %>
+    <%= @users.find_by_id(@statement.purchaser_id).first_name %> <%= @users.find_by_id(@statement.purchaser_id).last_name %>
+    
+  </div>
+  
+  <div class="field">
+    <div class="column"><%= f.label :รายการสินค้า %></div>
+    <div class="column"><%= f.label :quantity %></div>
+    <div class="column"><%= f.label :price %></div>
+    <div class="column"><%= f.label :pv %></div>
+  </div>
+  
+  <div class="field", id="productlist">
+    <% @statement.statement_products.each do |product| %>
+      <div class="field" id="row_1">
+        <select name="list[product1[id]]" id="list_product1_id" onchange="javascript:changeSelection(this)">
+          <option value="0">กรุณาเลือกสินค้า</option>
+          <%= options_from_collection_for_select(@products, "id", "name", selected: product.product.id) %>
+        </select>
+        <input type="number" name="list[product1[quantity]]" id="list_product1_quantity" value="0">
+        <input type="number" name="list[product1[price]]" id="list_product1_price" value="0">
+        <input type="number" name="list[product1[pv]]" id="list_product1_pv" value="0">
+      </div>
+    <% end %>
+  </div>
+  
+  <%= button_tag "new", :type => "button", :onclick => "javascript:addRowstatement()" %>
+
+  <div class="field">
+    <%= f.label :total_price %>
+    <%= f.text_field :total_price, :value => "0", :type => "number" %>
+  </div>
+
+  <div class="field">
+    <%= f.label :total_pv %>
+    <%= f.text_field :total_pv, :value => "0", :type => "number" %>
+  </div>
+
+  <div class="actions">
+    <%= f.submit %>
+  </div>
+  </div>
+<% end %>
