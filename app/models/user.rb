@@ -62,6 +62,10 @@ class User < ApplicationRecord
     iden_num << n13
     return iden_num.join
   end
+  
+  def self.all_except(user)
+    where.not(id: user)
+  end
 
   # ===================================================
   # public function

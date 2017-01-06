@@ -62,7 +62,7 @@ class OrdersController < ApplicationController
     @product_id_list = params[:product_list]
     list = []
     
-    if(purchaser_id != "0") 
+    if(@purchaser_id != "0") 
       @user = User.find_by_id(purchaser_id)
       product_id_list.each do |product_id|
         @price = changePrice(@purchaser_id, product_id)
@@ -93,14 +93,37 @@ class OrdersController < ApplicationController
     params.require(:list)
     if params.has_key?(:list) and order_params[:purchaser_id] != 0
       @order = current_user.orders.create(order_params)
+      @buyer = User.find_by_id(order_params[:purchaser_id])
       params[:list].each do |pro|
         @product = Product.find_by_id(params[:list][pro][:id])
-        @test = @order.order_products.create(
-            product: @product,
-            :quantity => params[:list][pro][:quantity].to_i ,
-            :total_price => params[:list][pro][:price].to_i ,
-            :total_pv => params[:list][pro][:pv].to_i
+        @order_product = @order.order_products.find_by_product(@product)
+        
+        if(@order_product.nil?)
+          @order_product = @order.order_products.create(
+              product: @product,
+              :quantity => params[:list][pro][:quantity].to_i ,
+              :total_price => params[:list][pro][:price].to_i ,
+              :total_pv => params[:list][pro][:pv].to_i
+            )
+        else
+          @order_product.quantity += params[:list][pro][:quantity].to_i
+          @order_product.total_price += params[:list][pro][:price].to_i
+          @order_product.total_pv += params[:list][pro][:pv].to_i
+        end
+        
+        @stock_saler = current_user.stock.find_by_product(@product)
+        @stock_buyer = @buyer.stock.find_by_product(@product)
+        
+        if(@stock_buyer.nil?)
+          @stock_buyer = @buyer.stock.create(
+              product: @product,
+              :quantity => @order_product.quantity
           )
+          @stock_saler.quantity -= @order_product.quantity
+        else
+          @stock_saler.quantity -= @order_product.quantity
+          @stock_buyer.quantity += @order_product.quantity
+        end
       end
     end
 

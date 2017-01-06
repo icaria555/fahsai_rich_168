@@ -145,10 +145,13 @@ def create_product_and_discout
 end
 
 def deleteAllTable 
-	Product.delete_all
+	#Product.delete_all
+	User.delete_all
+	
 end
+deleteAllTable()
 
 #create_roles()
 #create_th_location()
-#create_user()
-create_product_and_discout()
+create_user()
+#create_product_and_discout()

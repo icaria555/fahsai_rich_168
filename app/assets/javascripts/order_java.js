@@ -1,6 +1,6 @@
 var changeCount = 1
 
-function addRowOrder() {
+function addRow() {
     var div = document.createElement('div');
     div.className = 'field';
     
@@ -16,6 +16,7 @@ function addRowOrder() {
     var elem_name = ['quantity', 'price', 'pv']
     elem_name.forEach(function(name) {
         var elem = document.createElement('input')
+        elem.setAttribute("class", "rowelem")
         elem.setAttribute("id", "list_product" + generate_num + "_" + name)
         elem.setAttribute("name", "list[product" + generate_num + "[" + name + "]]")
         elem.setAttribute("type", "number");
@@ -28,7 +29,7 @@ function addRowOrder() {
         div.appendChild(elem)
     });
     
-    div.innerHTML = div.innerHTML + '<button onclick="deleteRow(' + generate_num + ')">delete</button>'
+    div.innerHTML = div.innerHTML + '<button class="rowelem" onclick="deleteRow(' + generate_num + ')">delete</button>'
     document.getElementById('productlist').appendChild(div);
 }
 
