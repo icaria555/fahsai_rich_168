@@ -45,7 +45,11 @@ class OrdersControllerTest < ActionDispatch::IntegrationTest
   end
   
   test "pricetagfield" do 
-    post '/pricetagfield', params: { purchaser_id: 2 }
+    post '/pricetagfield', params: { 
+      purchaser_id: 2,
+      product_list: [1,2]
+        
+      }
     body = JSON.parse(response.body)
     #print body
     assert_response :success

@@ -1,35 +1,36 @@
 <p id="notice"><%= notice %></p>
-
-<h1>Orders</h1>
-
-<table>
-  <thead>
-    <tr>
-      <th colspan="3"></th>
-    </tr>
-  </thead>
-
-  <tbody>
-    <tr>
-      <td>ผู้ซื้อ</td>
-      <td>ราคารวม</td>
-      <td>pv รวม</td>
-    </tr>
-    <% @orders.each do |order| %>
-      
+<div class="page_body">
+  <h1>Orders</h1>
+  
+  <table>
+    <thead>
       <tr>
-        <% @buyer = @users.find_by_id(order.purchaser_id) %>
-        <td><%=@buyer.first_name %> <%=@buyer.last_name %></td>
-        <td><%= order.total_price %></td>
-        <td><%= order.total_pv %></td>
-        <td><%= link_to 'Show', order %></td>
-        <td><%= link_to 'Edit', edit_order_path(order) %></td>
-        <td><%= link_to 'Destroy', order, method: :delete, data: { confirm: 'Are you sure?' } %></td>
+        <th colspan="3"></th>
       </tr>
-    <% end %>
-  </tbody>
-</table>
-
-<br>
-
-<%= link_to 'New Order', new_order_path %>
+    </thead>
+  
+    <tbody>
+      <tr>
+        <td>ผู้ซื้อ</td>
+        <td>ราคารวม</td>
+        <td>pv รวม</td>
+      </tr>
+      <% @orders.each do |order| %>
+        
+        <tr>
+          <% @buyer = @users.find_by_id(order.purchaser_id) %>
+          <td><%=@buyer.first_name %> <%=@buyer.last_name %></td>
+          <td><%= order.total_price %></td>
+          <td><%= order.total_pv %></td>
+          <td><%= link_to 'Show', order %></td>
+          <td><%= link_to 'Edit', edit_order_path(order) %></td>
+          <td><%= link_to 'Destroy', order, method: :delete, data: { confirm: 'Are you sure?' } %></td>
+        </tr>
+      <% end %>
+    </tbody>
+  </table>
+  
+  <br>
+  
+  <%= link_to 'New Order', new_order_path %>
+</div>

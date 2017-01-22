@@ -59,6 +59,10 @@
         <ul class="treeview-menu">
           <li><a href="<%= new_order_path %>">สั่งสินค้า</a></li>
           <li><a href="<%= orders_path %>">ตารางคำสั่งซื้อ</a></li>
+          <% if current_user.role.name == "admin" || current_user.role.name == "employee" %>
+            <li><a href="<%= products_path %>">รายการสินค้า</a></li>
+            <li><a href="<%= new_product_path %>">เพิ่มสินค้า</a></li>
+          <% end %>
         </ul>
       </li>
 

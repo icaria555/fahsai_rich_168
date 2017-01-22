@@ -9,7 +9,6 @@ class OrdersController < ApplicationController
     @orders.each do |order|
       @users.find_by_id(order.purchaser_id).nil?
     end
-    
   end
 
   # GET /orders/1
@@ -22,7 +21,13 @@ class OrdersController < ApplicationController
 
   # GET /orders/new
   def new
-    @products = Product.all
+    @products = nil
+    
+    if(current_user.role == Role.admin || current_user.role == Role.employee)
+      @products = Product.all
+    else
+      @products = current_user.products
+    end
     @order = Order.new
   end
   
@@ -53,7 +58,6 @@ class OrdersController < ApplicationController
       @product = Product.find_by_id(params[:product_id])
       render json: {"price": @product.price, "pv": @product.pv, "element_name": params[:element_name]}
     end
-    
   end
   
   def pricetagfield
@@ -63,13 +67,12 @@ class OrdersController < ApplicationController
     list = []
     
     if(@purchaser_id != "0") 
-      @user = User.find_by_id(purchaser_id)
-      product_id_list.each do |product_id|
+      @user = User.find_by_id(@purchaser_id)
+      @product_id_list.each do |product_id|
         @price = changePrice(@purchaser_id, product_id)
         list.push(@price)
       end
     end
-    
     @message = {"price": list}
     render json: @message
   end
@@ -92,11 +95,15 @@ class OrdersController < ApplicationController
     
     params.require(:list)
     if params.has_key?(:list) and order_params[:purchaser_id] != 0
+      
       @order = current_user.orders.create(order_params)
+      print @order
       @buyer = User.find_by_id(order_params[:purchaser_id])
+      print @buyer.first_name , "tttttttttttttt"
       params[:list].each do |pro|
         @product = Product.find_by_id(params[:list][pro][:id])
-        @order_product = @order.order_products.find_by_product(@product)
+        print @product.nil? , "product"
+        @order_product = @order.order_products.find_by_product_id(@product)
         
         if(@order_product.nil?)
           @order_product = @order.order_products.create(
@@ -111,18 +118,35 @@ class OrdersController < ApplicationController
           @order_product.total_pv += params[:list][pro][:pv].to_i
         end
         
-        @stock_saler = current_user.stock.find_by_product(@product)
-        @stock_buyer = @buyer.stock.find_by_product(@product)
-        
-        if(@stock_buyer.nil?)
-          @stock_buyer = @buyer.stock.create(
-              product: @product,
-              :quantity => @order_product.quantity
-          )
-          @stock_saler.quantity -= @order_product.quantity
+        if(current_user.role == Role.admin || current_user.role == Role.employee)
+          @stock_saler = @product
+          @stock_buyer = @buyer.stocks.find_by_product_id(@product)
+          
+          if(@stock_buyer.nil?)
+            @stock_buyer = @buyer.stock.create(
+                product: @product,
+                :quantity => @order_product.quantity
+            )
+            @stock_saler.quantity -= @order_product.quantity
+          else
+            @stock_saler.quantity -= @order_product.quantity
+            @stock_buyer.quantity += @order_product.quantity
+          end
+          
         else
-          @stock_saler.quantity -= @order_product.quantity
-          @stock_buyer.quantity += @order_product.quantity
+          @stock_saler = current_user.stock.find_by_product(@product)
+          @stock_buyer = @buyer.stock.find_by_product(@product)
+          
+          if(@stock_buyer.nil?)
+            @stock_buyer = @buyer.stock.create(
+                product: @product,
+                :quantity => @order_product.quantity
+            )
+            @stock_saler.quantity -= @order_product.quantity
+          else
+            @stock_saler.quantity -= @order_product.quantity
+            @stock_buyer.quantity += @order_product.quantity
+          end
         end
       end
     end

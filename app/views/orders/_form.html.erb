@@ -31,7 +31,11 @@
     <div class="field" id="productlist">
       <div class="field" id="row_1">
         <select class="rowelem" name="list[product1[id]]" id="list_product1_id" onchange="javascript:changeSelection(this)">
-          <option value="0">กรุณาเลือกสินค้า</option><%= options_from_collection_for_select(@products, "id", "name") %>
+          <% if order.errors.any? %>
+            <option value="0">กรุณาเลือกสินค้า</option><%= options_from_collection_for_select(@products, "id", "name") %>
+          <% else %>
+            <option value="0">กรุณาเลือกสินค้า</option><%= options_from_collection_for_select(@products, "id", "name") %>
+          <% end %>
         </select>
         <input type="number" class="rowelem" name="list[product1[quantity]]" id="list_product1_quantity" value="0" onchange="javascript:changeQuantity(this)" onfocus="javascript:storePreviousValue(this)">
         <input type="number" class="rowelem" name="list[product1[price]]" id="list_product1_price" value="0">

@@ -1,5 +1,6 @@
 class ProductsController < ApplicationController
   before_action :set_product, only: [:show, :edit, :update, :destroy]
+  before_action :check_roles, only: [:new, :create, :destroy, :edit]
 
   # GET /products
   # GET /products.json
@@ -10,7 +11,6 @@ class ProductsController < ApplicationController
   # GET /products/1
   # GET /products/1.json
   def show
-    @product = Product.find_by_id(params[:id])
   end
 
   # GET /products/new
@@ -20,7 +20,6 @@ class ProductsController < ApplicationController
 
   # GET /products/1/edit
   def edit
-    @product = Product.find_by_id(params[:id])
   end
 
   # POST /products
@@ -68,7 +67,13 @@ class ProductsController < ApplicationController
     def set_product
       @product = Product.find(params[:id])
     end
-
+    
+    def check_roles
+      if current_user.role.name != "admin" and current_user.role.name != "employee"
+        redirect_to root_path
+        
+      end
+    end
     # Never trust parameters from the scary internet, only allow the white list through.
     def product_params
       params.require(:product).permit(:name, :description, :price, :pv, :quantity, :unit)

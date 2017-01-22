@@ -1,31 +1,34 @@
 <p id="notice"><%= notice %></p>
-<table>
-  <thead>
-    <tr>
-      <th colspan="3"></th>
-    </tr>
-  </thead>
 
-  <tbody>
-    <% @buyer = @users.find_by_id(@statement.purchaser_id) %>
-    ผู้ซื้อ
-    <%=@buyer.first_name %> <%=@buyer.last_name %>
-    <tr>
-      <td>รายชื่อสินค้า</td>
-      <td>ราคารวม</td>
-      <td>pvรวม</td>
-    </tr>
-    <% @statement.statement_products.each do |product| %>
+<div class="page_body">
+  <table>
+    <thead>
       <tr>
-        <td><%= product.product.name %></td>
-        <td><%= product.total_price %></td>
-        <td><%= product.total_pv %></td>
-        <td><%= link_to 'Show', product.product %></td>
+        <th colspan="3"></th>
       </tr>
-      </td>
-    <% end %>
-  </tbody>
-</table>
+    </thead>
+  
+    <tbody>
+      <% @buyer = @users.find_by_id(@statement.purchaser_id) %>
+      ผู้ซื้อ
+      <%=@buyer.first_name %> <%=@buyer.last_name %>
+      <tr>
+        <td>รายชื่อสินค้า</td>
+        <td>ราคารวม</td>
+        <td>pvรวม</td>
+      </tr>
+      <% @statement.statement_products.each do |product| %>
+        <tr>
+          <td><%= product.product.name %></td>
+          <td><%= product.total_price %></td>
+          <td><%= product.total_pv %></td>
+          <td><%= link_to 'Show', product.product %></td>
+        </tr>
+        </td>
+      <% end %>
+    </tbody>
+  </table>
+  <%= link_to 'Edit', edit_statement_path(@statement) %> | <%= link_to 'Destroy', @statement, method: :delete, data: { confirm: 'Are you sure?' } %> |
+  <%= link_to 'Back', statements_path %>
+</div>
 
-<%= link_to 'Edit', edit_statement_path(@statement) %> | <%= link_to 'Destroy', @statement, method: :delete, data: { confirm: 'Are you sure?' } %> |
-<%= link_to 'Back', statements_path %>

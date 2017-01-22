@@ -80,11 +80,15 @@ def create_user
 		amphur: amphur,
 		province: province,
 		zipcode: zipcode,
+		role: Role.admin,
 		phone_number: "0826810461",
 		line_id: "tachagon",
 		birthday: "06/02/1993",
 		gender: "male"
 		)
+	print user.errors.full_messages
+	print user.role.name
+	print Role.admin.name
 	puts "create user success!"
 end
 
