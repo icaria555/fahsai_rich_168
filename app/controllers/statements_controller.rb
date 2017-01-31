@@ -4,7 +4,10 @@ class StatementsController < ApplicationController
   # GET /statements
   # GET /statements.json
   def index
-    @statements = current_user.statements.all
+    @statements = Statement.all
+    if(current_user.role.name != "admin" and current_user.role.name != "employee" )
+      @orders = Order.find_by_saler_id(current_user.id)
+    end
     @users = User.all
     @statements.each do |statement|
       @users.find_by_id(statement.giver_id).nil?
@@ -15,8 +18,8 @@ class StatementsController < ApplicationController
   # GET /statements/1.json
   def show
     @users = User.all
-    @statement = current_user.statements.find_by_id(params[:id])
-    print @statement.products.length, params[:id], "length"
+    @statement = Statement.find_by_id(params[:id])
+    #print @statement.products.length, params[:id], "length"
   end
 
   # GET /statements/new
@@ -28,7 +31,7 @@ class StatementsController < ApplicationController
     else
       @products = current_user.products
     end
-    @statement = statement.new
+    @statement = Statement.new
   end
   
   def changePrice(user_id, product_id)
@@ -83,7 +86,7 @@ class StatementsController < ApplicationController
   # GET /statements/1/edit
   def edit
     @users = User.all
-    @statement = current_user.statements.find_by_id(params[:id])
+    @statement = Statement.find_by_id(params[:id])
     @products = Product.all
   end
 
@@ -96,17 +99,18 @@ class StatementsController < ApplicationController
     params.require(:list)
     if params.has_key?(:list) and statement_params[:giver_id] != 0
       
-      @statement = current_user.statements.create(statement_params)
-      print @statement
+      @statement = Statement.create(statement_params)
+      print @statement.errors.full_messages
       @buyer = User.find_by_id(statement_params[:giver_id])
       print @buyer.first_name , "tttttttttttttt"
+      
       params[:list].each do |pro|
         @product = Product.find_by_id(params[:list][pro][:id])
         print @product.nil? , "product"
-        @statement_product = @statement.statement_products.find_by_product_id(@product)
+        @statement_product = @statement.product_statements.find_by_product_id(@product)
         
         if(@statement_product.nil?)
-          @statement_product = @statement.statement_products.create(
+          @statement_product = @statement.product_statements.create(
               product: @product,
               :quantity => params[:list][pro][:quantity].to_i ,
               :total_price => params[:list][pro][:price].to_i ,
@@ -193,7 +197,7 @@ class StatementsController < ApplicationController
   private
     # Use callbacks to share common setup or constraints between actions.
     def set_statement
-      @statement = statement.find(params[:id])
+      @statement = Statement.find(params[:id])
     end
 
     # Never trust parameters from the scary internet, only allow the white list through.

@@ -25,7 +25,6 @@ class User < ApplicationRecord
   belongs_to :province
   belongs_to :zipcode
   belongs_to :role
-  has_many :orders
   has_many :stocks
   has_many :products, through: :stocks
 

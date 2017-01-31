@@ -67,14 +67,12 @@ ActiveRecord::Schema.define(version: 20161124092924) do
   end
 
   create_table "orders", force: :cascade do |t|
-    t.integer  "user_id"
     t.integer  "purchaser_id"
     t.integer  "saler_id"
     t.float    "total_price"
     t.float    "total_pv"
     t.datetime "created_at",   null: false
     t.datetime "updated_at",   null: false
-    t.index ["user_id"], name: "index_orders_on_user_id"
   end
 
   create_table "product_statements", force: :cascade do |t|

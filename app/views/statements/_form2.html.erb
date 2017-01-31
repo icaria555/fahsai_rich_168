@@ -14,7 +14,7 @@
   <div ng-controller="SearchUserCrtl">
   <div class="field">
     <%= f.label :ผู้ซื้อ %>
-    <%= @users.find_by_id(@statement.purchaser_id).first_name %> <%= @users.find_by_id(@statement.purchaser_id).last_name %>
+    <%= @users.find_by_id(@statement.giver_id).first_name %> <%= @users.find_by_id(@statement.giver_id).last_name %>
     
   </div>
   
@@ -26,7 +26,7 @@
   </div>
   
   <div class="field", id="productlist">
-    <% @statement.statement_products.each do |product| %>
+    <% @statement.product_statements.each do |product| %>
       <div class="field" id="row_1">
         <select name="list[product1[id]]" id="list_product1_id" onchange="javascript:changeSelection(this)">
           <option value="0">กรุณาเลือกสินค้า</option>

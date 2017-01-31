@@ -9,7 +9,7 @@
     </thead>
   
     <tbody>
-      <% @buyer = @users.find_by_id(@statement.purchaser_id) %>
+      <% @buyer = @users.find_by_id(@statement.giver_id) %>
       ผู้ซื้อ
       <%=@buyer.first_name %> <%=@buyer.last_name %>
       <tr>
@@ -17,7 +17,7 @@
         <td>ราคารวม</td>
         <td>pvรวม</td>
       </tr>
-      <% @statement.statement_products.each do |product| %>
+      <% @statement.product_statements.each do |product| %>
         <tr>
           <td><%= product.product.name %></td>
           <td><%= product.total_price %></td>

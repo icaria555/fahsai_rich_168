@@ -1,7 +1,10 @@
 require 'test_helper'
 
 class StatementsControllerTest < ActionDispatch::IntegrationTest
+  include Devise::Test::IntegrationHelpers
   setup do
+    @user = users(:rungroj)
+    sign_in @user
     @statement = statements(:one)
   end
 
@@ -17,7 +20,26 @@ class StatementsControllerTest < ActionDispatch::IntegrationTest
 
   test "should create statement" do
     assert_difference('Statement.count') do
-      post statements_url, params: { statement: {  } }
+      post statements_url, params: { statement: {
+        giver_id: 2,
+        total_price: 200,
+        total_pv: 10
+      },
+      list: {
+        product1: {
+          id: 1,
+          quantity: 1,
+          price: 1,
+          pv: 1
+        },
+        product2: {
+          id: 2,
+          quantity: 1,
+          price: 1,
+          pv: 1
+        }
+      }
+    }
     end
 
     assert_redirected_to statement_url(Statement.last)
@@ -34,7 +56,11 @@ class StatementsControllerTest < ActionDispatch::IntegrationTest
   end
 
   test "should update statement" do
-    patch statement_url(@statement), params: { statement: {  } }
+    patch statement_url(@statement), params: { statement: {  
+        :giver_id => 2,
+        :total_price => 1000,
+        :total_pv => 10
+    } }
     assert_redirected_to statement_url(@statement)
   end
 

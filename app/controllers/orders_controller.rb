@@ -4,7 +4,10 @@ class OrdersController < ApplicationController
   # GET /orders
   # GET /orders.json
   def index
-    @orders = current_user.orders.all
+    @orders = Order.all
+    if(current_user.role.name != "admin" and current_user.role.name != "employee" )
+      @orders = Order.find_by_saler_id(current_user.id)
+    end
     @users = User.all
     @orders.each do |order|
       @users.find_by_id(order.purchaser_id).nil?
@@ -15,8 +18,8 @@ class OrdersController < ApplicationController
   # GET /orders/1.json
   def show
     @users = User.all
-    @order = current_user.orders.find_by_id(params[:id])
-    print @order.products.length, params[:id], "length"
+    @order = Order.find_by_id(params[:id])
+    #print @order.products.length, params[:id], "length"
   end
 
   # GET /orders/new
@@ -83,7 +86,7 @@ class OrdersController < ApplicationController
   # GET /orders/1/edit
   def edit
     @users = User.all
-    @order = current_user.orders.find_by_id(params[:id])
+    @order = Order.find_by_id(params[:id])
     @products = Product.all
   end
 
@@ -96,10 +99,11 @@ class OrdersController < ApplicationController
     params.require(:list)
     if params.has_key?(:list) and order_params[:purchaser_id] != 0
       
-      @order = current_user.orders.create(order_params)
-      print @order
+      @order = Order.create(order_params)
+      print @order.errors.full_messages
       @buyer = User.find_by_id(order_params[:purchaser_id])
       print @buyer.first_name , "tttttttttttttt"
+      
       params[:list].each do |pro|
         @product = Product.find_by_id(params[:list][pro][:id])
         print @product.nil? , "product"

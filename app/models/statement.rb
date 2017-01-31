@@ -1,7 +1,6 @@
 class Statement < ApplicationRecord
-  belongs_to :user
-  has_many :statement_products
-  has_many :products, through: :statement_products
+  has_many :product_statements
+  has_many :products, through: :product_statements
   
   after_initialize :default_values
   

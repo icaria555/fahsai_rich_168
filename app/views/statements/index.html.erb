@@ -17,7 +17,7 @@
       </tr>
       <% @statements.each do |statement| %>
         <tr>
-          <% @buyer = @users.find_by_id(statement.purchaser_id) %>
+          <% @buyer = @users.find_by_id(statement.giver_id) %>
           <td><%=@buyer.first_name %> <%=@buyer.last_name %></td>
           <td><%= statement.total_price %></td>
           <td><%= statement.total_pv %></td>
